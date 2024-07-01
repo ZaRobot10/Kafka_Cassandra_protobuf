@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+package train;
+
+message Passenger {
+  string name = 1;       // Passenger's name
+  string gender = 2;     // Gender of the passenger
+  int32 age = 3;         // Age of the passenger
+}
+
+message PassengerJourneyDetail {
+  string dateOfJourney = 1;    // Date of journey in YYYY-MM-DD format
+  string trainNumber = 2;       // Train number
+  string trainName = 3;         // Train name
+  string boardingStation = 4;   // Boarding station code
+  string destinationStation = 5; // Destination station code
+  int32 coachNumber = 6;        // Coach number
+  int32 seatNumber = 7;         // Seat number
+  string ticketStatus = 8;      // Ticket status (e.g., confirmed, RAC, waiting list)
+  string classOfTravel = 9;     // Class of travel (e.g., Sleeper, AC 3 Tier, AC 2 Tier)
+}
+
+message PassengerFareDetail {
+  string fareType = 1;   // Type of fare (e.g., Adult, Child, Senior)
+  double amount = 2;     // Fare amount
+  string currency = 3;   // Currency code (e.g., USD, INR)
+}
+
+message AggregatedFareDetail {
+  double totalAmount = 1;  // Total fare amount for all passengers in the lap
+  string currency = 2;      // Currency code (e.g., USD, INR)
+}
+
+message JourneyLap {
+  repeated int32 passengerIndexes = 1; // List of indexes referencing passengers
+  repeated PassengerJourneyDetail journeyDetails = 2; // List of journey details for the lap
+  repeated PassengerFareDetail fareDetails = 3;       // List of fare details for the lap
+  AggregatedFareDetail aggregatedFareDetail = 4;     // Aggregated fare details for the lap
+}
+
+message PassengerNameRecord {
+  string pnr = 1;                // PNR number
+  repeated Passenger passengers = 2; // List of passengers
+  repeated JourneyLap journeyLaps = 3; // List of journey laps
+}

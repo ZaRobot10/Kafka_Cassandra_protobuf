@@ -1,0 +1,52 @@
+plugins {
+    id 'org.springframework.boot' version '3.1.1'
+    id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+    id 'com.google.protobuf' version '0.8.19'
+    id 'java'
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '17'
+
+repositories {
+    mavenCentral()
+    maven { url "https://packages.confluent.io/maven/" }
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.kafka:spring-kafka'
+    implementation 'com.google.protobuf:protobuf-java:3.21.12'
+    implementation 'io.confluent:kafka-protobuf-serializer:7.6.0'
+    implementation 'org.springframework.boot:spring-boot-starter-data-cassandra'
+    implementation 'com.datastax.oss:java-driver-core:4.15.0'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+protobuf {
+    protoc {
+        artifact = 'com.google.protobuf:protoc:3.21.12'
+    }
+    plugins {
+        grpc {
+            artifact = 'io.grpc:protoc-gen-grpc-java:1.44.0'
+        }
+    }
+    generateProtoTasks {
+        all().each { task ->
+            task.plugins {
+                grpc {}
+            }
+        }
+    }
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs 'src/main/java', 'build/generated/source/proto/main/java'
+        }
+    }
+}
+
